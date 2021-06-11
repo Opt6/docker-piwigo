@@ -56,9 +56,9 @@ RUN \
     wget &&\
 
   curl -o \
-    /usr/lib/bin/install-php-extensions -L \
+    /install-php-extensions -L \
     "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" && \
-  chmod +x /usr/local/bin/install-php-extensions && \
+  chmod +x /install-php-extensions && \
   install-php-extensions zip && \
   
   echo "**** download piwigo ****" && \

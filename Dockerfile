@@ -8,11 +8,11 @@
     # && docker-php-ext-configure zip --with-zlib-dir=/usr \
     # && docker-php-ext-install -j$(nproc) zip
 
-FROM php:7.4-fpm-alpine
+# FROM php:7.4-fpm-alpine
 
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+# COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
+# RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
 
 #RUN install-php-extensions zip && docker-php-ext-configure zip --with-libzlib
 
@@ -33,6 +33,7 @@ RUN \
     ffmpeg \
     imagemagick \
     libjpeg-turbo-utils \
+    libzip-dev \
     lynx \
     mediainfo \
     php7-apcu \
@@ -52,8 +53,11 @@ RUN \
     poppler-utils \
     re2c \
     unzip \
-    wget && \
-  
+    wget \
+
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN docker-php-ext-install zip
 #ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 #RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
@@ -61,7 +65,7 @@ RUN \
 
 # Install PHP extensions
 #RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \
-
+RUN \
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \

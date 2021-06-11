@@ -1,11 +1,27 @@
-FROM php:7.4-fpm-alpine
+RUN set -xe \
+    && apk add --update \
+        icu \
+    && apk add --no-cache --virtual .php-deps \
+        make \
+    && apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        libzip-dev \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install \
+        zip \
+    && docker-php-ext-enable zip \
+    && { find /usr/local/lib -type f -print0 | xargs -0r strip --strip-all -p 2>/dev/null || true; } \
+    && apk del .build-deps \
+    && rm -rf /tmp/* /usr/local/lib/php/doc/* /var/cache/apk/*
 
-COPY docker-php-ext-get /usr/local/bin/
+# FROM php:7.4-fpm-alpine
 
-RUN docker-php-source extract &&\
-    docker-php-ext-enable zip &&\
-    docker-php-ext-get libzip-dev &&\
-    docker-php-ext-install zip
+# COPY docker-php-ext-get /usr/local/bin/
+
+# RUN docker-php-source extract &&\
+    # docker-php-ext-enable zip &&\
+    # docker-php-ext-get libzip-dev &&\
+    # docker-php-ext-install zip
 
 # COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 

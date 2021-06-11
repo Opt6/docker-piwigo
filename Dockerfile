@@ -1,3 +1,13 @@
+FROM php:7.4-fpm-alpine
+
+RUN \
+  echo "**** install custom packages ****" && \
+  apk add --no-cache --upgrade \
+        libzip-dev \
+        zip \
+    && docker-php-ext-configure zip --with-zlib-dir=/usr \
+    && docker-php-ext-install -j$(nproc) zip
+
 FROM ghcr.io/linuxserver/baseimage-alpine-nginx:3.13
 
 # set version label
@@ -36,16 +46,6 @@ RUN \
     unzip \
     wget && \
   
-FROM php:7.4-fpm-alpine
-
-RUN \
-  echo "**** install custom packages ****" && \
-  apk add --no-cache --upgrade \
-        libzip-dev \
-        zip \
-    && docker-php-ext-configure zip --with-zlib-dir=/usr \
-    && docker-php-ext-install -j$(nproc) zip
-
 #ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 #RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
@@ -54,7 +54,6 @@ RUN \
 # Install PHP extensions
 #RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \
 
-RUN \  
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \
@@ -69,6 +68,8 @@ RUN \
   # The max post size is 8M by default, it must be at least max_filesize
   sed -ri 's/^post_max_size = .*/post_max_size = 100M/' /etc/php7/php.ini
 
+# copy files from custom
+COPY --from=0 /usr/src/php/ext/zip/modules .
 # copy local files
 COPY root/ /
 

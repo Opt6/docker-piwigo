@@ -40,7 +40,7 @@ RUN \
 RUN apt-get update && \
      apt-get install -y \
          libzip-dev \
-         && docker-php-ext-install zip
+         && docker-php-ext-install zip && \
   
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \

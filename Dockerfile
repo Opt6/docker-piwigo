@@ -51,7 +51,8 @@ RUN apt-get update && apt-get install -y \
 
 # Install PHP extensions
 #RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \
-  
+
+RUN \  
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \

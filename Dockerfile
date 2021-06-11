@@ -55,9 +55,6 @@ RUN \
     unzip \
     wget \
 
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
-RUN docker-php-ext-install zip
 #ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 #RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
@@ -65,7 +62,9 @@ RUN docker-php-ext-install zip
 
 # Install PHP extensions
 #RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \
-RUN \
+
+  docker-php-ext-install zip && \
+
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \

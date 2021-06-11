@@ -34,19 +34,23 @@ RUN \
     poppler-utils \
     re2c \
     unzip \
-    wget \
-    zip \
-    libzip-dev && \
+    wget && \
   
-FROM php:7.2-cli
+FROM php:7.4-cli
 
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN apt-get update && apt-get install -y \
+        libzip-dev \
+        zip \
+    && docker-php-ext-configure zip --with-zlib-dir=/usr \
+    && docker-php-ext-install -j$(nproc) zip
 
-RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions gd xdebug zip
+#ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+#RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+#    install-php-extensions gd xdebug zip
 
 # Install PHP extensions
-RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \
+#RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \
   
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \

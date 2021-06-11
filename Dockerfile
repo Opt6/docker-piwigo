@@ -36,9 +36,9 @@ RUN \
     unzip \
     wget \
     zip \
-    ziplib-dev \
-    && docker-php-ext-configure zip --with-zlib-dir=/usr \
-    && docker-php-ext-install zip && \
+    ziplib-dev && \
+  docker-php-ext-configure zip --with-zlib-dir=/usr && \
+  docker-php-ext-install zip && \
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \

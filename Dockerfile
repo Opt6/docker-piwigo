@@ -36,10 +36,7 @@ RUN \
     unzip \
     wget \
     zip \
-    libzip-dev
-
-RUN \
-  docker-php-ext-install zip && \
+    libzip-dev && \
   
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \

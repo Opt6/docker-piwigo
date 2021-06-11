@@ -35,12 +35,9 @@ RUN \
     re2c \
     unzip \
     wget \
-    zip && \
-    
-RUN apt-get update && \
-     apt-get install -y \
-         libzip-dev \
-         && docker-php-ext-install zip && \
+    zip \
+    libzip-dev && \
+    docker-php-ext-install zip && \
   
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \

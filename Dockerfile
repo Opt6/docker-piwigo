@@ -1,4 +1,22 @@
-# FROM php:7.4-fpm-alpine
+FROM php:7.4-fpm-alpine
+
+COPY docker-php-ext-get /usr/local/bin/
+
+RUN docker-php-source extract &&\
+    docker-php-ext-enable zip &&\
+    docker-php-ext-get libzip-dev &&\
+    docker-php-ext-install zip
+
+# COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+# RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
+
+# RUN \
+  # curl -o \
+    # /install-php-extensions -L \
+    # "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" && \
+  # chmod +x /install-php-extensions && \
+  # /install-php-extensions zip && \
 
 # RUN \
   # echo "**** install custom packages ****" && \
@@ -7,14 +25,6 @@
         # zip \
     # && docker-php-ext-configure zip --with-zlib-dir=/usr \
     # && docker-php-ext-install -j$(nproc) zip
-
-# FROM php:7.4-fpm-alpine
-
-# COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
-# RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
-
-#RUN install-php-extensions zip && docker-php-ext-configure zip --with-libzlib
 
 FROM ghcr.io/linuxserver/baseimage-alpine-nginx:3.13
 
@@ -55,11 +65,6 @@ RUN \
     unzip \
     wget &&\
 
-  curl -o \
-    /install-php-extensions -L \
-    "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" && \
-  chmod +x /install-php-extensions && \
-  /install-php-extensions zip && \
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \

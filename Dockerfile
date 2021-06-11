@@ -8,6 +8,12 @@
     # && docker-php-ext-configure zip --with-zlib-dir=/usr \
     # && docker-php-ext-install -j$(nproc) zip
 
+FROM php:7.4-fpm-alpine
+
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions zip
+
 FROM ghcr.io/linuxserver/baseimage-alpine-nginx:3.13
 
 # set version label
@@ -68,10 +74,6 @@ RUN \
   # The max post size is 8M by default, it must be at least max_filesize
   sed -ri 's/^post_max_size = .*/post_max_size = 100M/' /etc/php7/php.ini
 
-RUN docker-php-ext-install zip
-
-# copy files from custom
-# COPY --from=0 /usr/src/php/ext/zip/modules .
 # copy local files
 COPY root/ /
 

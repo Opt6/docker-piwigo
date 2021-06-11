@@ -12,7 +12,7 @@ FROM php:7.4-fpm-alpine
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN apk add --no-cache libzip-dev && docker-php-ext-configure zip --with-libzip=/usr/include && docker-php-ext-install zip
+RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
 
 #RUN install-php-extensions zip && docker-php-ext-configure zip --with-libzlib
 

@@ -58,11 +58,8 @@ RUN \
   curl -o \
     /install-php-extensions -L \
     "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" && \
-  chmod +x /install-php-extensions \
-RUN \  
-  install-php-extensions zip \
-  
-RUN \
+  chmod +x /install-php-extensions && \
+  /install-php-extensions zip && \
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \

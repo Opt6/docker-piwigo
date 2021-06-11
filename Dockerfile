@@ -36,9 +36,11 @@ RUN \
     unzip \
     wget && \
   
-FROM php:7.4-cli
+FROM php:7.4-fpm-alpine
 
-RUN apt-get update && apt-get install -y \
+RUN \
+  echo "**** install custom packages ****" && \
+  apk add --no-cache --upgrade \
         libzip-dev \
         zip \
     && docker-php-ext-configure zip --with-zlib-dir=/usr \

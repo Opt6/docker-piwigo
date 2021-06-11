@@ -38,9 +38,12 @@ RUN \
     zip \
     libzip-dev && \
   
-  # download helper script
-wget -q -O /usr/local/bin/install-php-extensions https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions \
-    || (echo "Failed while downloading php extension installer!"; exit 1)
+FROM php:7.2-cli
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions gd xdebug zip
 
 # Install PHP extensions
 RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \

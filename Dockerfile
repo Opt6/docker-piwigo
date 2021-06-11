@@ -15,6 +15,7 @@ RUN \
     ffmpeg \
     imagemagick \
     libjpeg-turbo-utils \
+    libzip-dev \
     lynx \
     mediainfo \
     php7-apcu \
@@ -34,7 +35,8 @@ RUN \
     poppler-utils \
     re2c \
     unzip \
-    wget && \
+    wget \
+    zip && \
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \

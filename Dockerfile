@@ -53,18 +53,14 @@ RUN \
     poppler-utils \
     re2c \
     unzip \
-    wget \
+    wget &&\
 
-#ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-#RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-#    install-php-extensions gd xdebug zip
-
-# Install PHP extensions
-#RUN docker-php-ext-install zip && docker-php-ext-configure zip --with-zlib-dir=/usr && \
-
-  docker-php-ext-install zip && \
-
+  curl -o \
+    /usr/lib/bin/install-php-extensions -L \
+    "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" && \
+  chmod +x /usr/local/bin/install-php-extensions && \
+  install-php-extensions zip && \
+  
   echo "**** download piwigo ****" && \
   if [ -z ${PIWIGO_RELEASE+x} ]; then \
     PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" \
